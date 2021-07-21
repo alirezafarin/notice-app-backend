@@ -18,7 +18,7 @@ const ImageUpload = multer({
   },
   async fileFilter(req, file, cb){
     // check if notice exists
-    const notice = await Notice.findOne({ _id: req.params.id});
+    const notice = await Notice.findOne({ _id: req.params.id, owner: req.user._id });
     if( !notice ) {
       return cb(new Error('فایل پیدا نشد'))
     }

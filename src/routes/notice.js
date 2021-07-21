@@ -26,7 +26,7 @@ router.post('/createNotice', auth, async(req, res) => {
 
 router.post('/notice/uploadImage/:id', auth, ImageUpload.single('image'), async(req, res) => {
   const imageName = `images/${req.file.filename}`;
-  const notice = await Notice.findOne({ _id: req.params.id});
+  const notice = await Notice.findOne({ _id: req.params.id, owner: req.user._id });
   if( !notice ) {
     return sendError(res, {
       message: 'عکس آپلود نشد'
@@ -118,5 +118,7 @@ router.delete('/deleteNotice/:id', auth, async(req, res) => {
     sendError(res, { message: 'آگهی پیدا نشد' });
   }
 })
+
+/////////////////////////////////////////////////////////////
 
 module.exports = router;

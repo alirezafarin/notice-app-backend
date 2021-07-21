@@ -5,6 +5,8 @@ const User = require('../models/user');
 
 const router = new express.Router();
 
+/////////////////////////////////////////////////////////////
+
 router.post('/user/signIn', async(req, res) => {
   try {
     let user = new User(req.body);
@@ -15,6 +17,8 @@ router.post('/user/signIn', async(req, res) => {
     sendError(res, error);
   }
 })
+
+/////////////////////////////////////////////////////////////
 
 router.post('/user/login', async(req, res) => {
   try {
@@ -30,6 +34,8 @@ router.post('/user/login', async(req, res) => {
   }
 })
 
+/////////////////////////////////////////////////////////////
+
 router.get('/user/logout', auth, async(req, res) => {
   try {
     const user = req.user;
@@ -40,5 +46,7 @@ router.get('/user/logout', auth, async(req, res) => {
     sendError(res, error);
   }
 })
+
+/////////////////////////////////////////////////////////////
 
 module.exports = router;
