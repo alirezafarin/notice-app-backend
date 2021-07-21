@@ -1,43 +1,12 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const { sendResponse, sendError } = require('../globalVariables/functions');
 const auth = require('../middlewares/auth');
 const Notice = require('../models/notice');
+const ImageUpload = require('../multer/uploadImage');
 
 const router = new express.Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/images')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
-  }
-})
-
-const ImageUpload = multer({
-  storage,
-  limits: {
-    fileSize: 1000000
-  },
-  async fileFilter(req, file, cb){
-    // check if notice exists
-    const notice = await Notice.findOne({ _id: req.params.id});
-    if( !notice ) {
-      return cb(new Error('فایل پیدا نشد'))
-    }
-    // check file format
-    const fileName = file.originalname;
-    if(fileName.endsWith('jpg')
-    || fileName.endsWith('jpeg')
-    || fileName.endsWith('png')) {
-      return cb(undefined, true);
-    }
-
-    cb(new Error('file format not accepted'))
-  }
-})
+/////////////////////////////////////////////////////////////
 
 router.post('/createNotice', auth, async(req, res) => {
   try {
@@ -52,6 +21,8 @@ router.post('/createNotice', auth, async(req, res) => {
     sendError(res, error);
   }
 })
+
+/////////////////////////////////////////////////////////////
 
 router.post('/notice/uploadImage/:id', auth, ImageUpload.single('image'), async(req, res) => {
   const imageName = `images/${req.file.filename}`;
@@ -75,6 +46,8 @@ router.post('/notice/uploadImage/:id', auth, ImageUpload.single('image'), async(
   sendError(res, error, 404);
 })
 
+/////////////////////////////////////////////////////////////
+
 router.get('/getAllNotices', async(req, res) => {
   try {
     const notices = await Notice.find({});
@@ -88,6 +61,8 @@ router.get('/getAllNotices', async(req, res) => {
   }
 })
 
+/////////////////////////////////////////////////////////////
+
 router.get('/getNoticeById/:id', async(req, res) => {
   try {
     const notice = await Notice.findOne({ _id: req.params.id });
@@ -100,6 +75,8 @@ router.get('/getNoticeById/:id', async(req, res) => {
     sendError(res, error);
   }
 })
+
+/////////////////////////////////////////////////////////////
 
 router.patch('/notice/:id', auth, async(req, res) => {
 
@@ -127,6 +104,7 @@ router.patch('/notice/:id', auth, async(req, res) => {
 
 });
 
+/////////////////////////////////////////////////////////////
 
 router.delete('/deleteNotice/:id', auth, async(req, res) => {
   try { 
