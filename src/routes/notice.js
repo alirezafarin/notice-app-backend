@@ -69,7 +69,7 @@ router.get('/getNoticeById', async(req, res) => {
     if( !notice ) {
       throw new Error('پیدا نشد');
     }
-    sendResponse(res, '', notice,
+    sendResponse(res, '', { ...notice._doc, _id: req.query.id },
     200);
   } catch (error) {
     sendError(res, error);
