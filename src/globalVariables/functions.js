@@ -20,10 +20,10 @@ const sendError = (res={}, error={}, status=400) => {
   });
 }
 
-const sendResponse = (res={}, message='', data={}, status=200) => {
+const sendResponse = (res={}, message='', result={}, status=200) => {
   res.status(status).send({
     message,
-    data,
+    result,
   });
 }
 
