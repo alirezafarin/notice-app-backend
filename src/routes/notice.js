@@ -63,9 +63,9 @@ router.get('/getAllNotices', async(req, res) => {
 
 /////////////////////////////////////////////////////////////
 
-router.get('/getNoticeById/:id', async(req, res) => {
+router.get('/getNoticeById', async(req, res) => {
   try {
-    const notice = await Notice.findOne({ _id: req.params.id });
+    const notice = await Notice.findOne({ _id: req.query.id });
     if( !notice ) {
       throw new Error('پیدا نشد');
     }
