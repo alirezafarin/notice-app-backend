@@ -1,6 +1,6 @@
 const express = require('express');
 const { sendError, sendResponse } = require('../globalVariables/functions');
-const auth = require('../middlewares/auth');
+const {auth} = require('../middlewares/auth');
 const User = require('../models/user');
 
 const router = new express.Router();
@@ -28,6 +28,18 @@ router.post('/user/login', async(req, res) => {
     const token = await user.generateToken();
     sendResponse(res, 'با موفقیت وارد شدید.',
     {user, token}, 
+    200);
+  } catch (error) {
+    sendError(res, error);
+  }
+})
+
+/////////////////////////////////////////////////////////////
+
+router.get('/user/getProfile', auth, async(req, res) => {
+  try {
+    sendResponse(res, '',
+    {user: req.user}, 
     200);
   } catch (error) {
     sendError(res, error);
