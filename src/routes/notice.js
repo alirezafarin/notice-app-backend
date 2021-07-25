@@ -1,6 +1,6 @@
 const express = require('express');
 const { sendResponse, sendError } = require('../globalVariables/functions');
-const auth = require('../middlewares/auth');
+const { auth, extractTokenFromHeader, getUserFromToken } = require('../middlewares/auth');
 const Notice = require('../models/notice');
 const ImageUpload = require('../multer/uploadImage');
 
@@ -70,10 +70,30 @@ router.get('/getNoticeById', async(req, res) => {
     if( !notice ) {
       throw new Error('پیدا نشد');
     }
-    sendResponse(res, '', { ...notice._doc, _id: req.query.id },
+    let editable = false;
+
+    try {
+      const token = extractTokenFromHeader(req);
+      let user = {};
+      if(token && token !== 'null') {
+        user = await getUserFromToken(token);
+        if(user) {
+          editable = notice.owner.equals(user._id);
+        }
+      }
+    }
+    catch{
+      editable = false;
+    }
+
+    // console.log(editable)
+    sendResponse(res, '',
+     { ...notice._doc,
+       _id: req.query.id,
+       editable },
     200);
   } catch (error) {
-    sendError(res, error);
+    sendError(res, { message: 'این آگهی پیدا نشد' });
   }
 })
 
