@@ -27,6 +27,7 @@ const noticeSchema = new Schema({
   },
   phoneNumber: {
     type: String,
+    required: [true, 'لطفا شماره تلفن خود را وارد کنید.'],
     trim: true
   },
   imageName: {

@@ -25,6 +25,7 @@ router.post('/createNotice', auth, async(req, res) => {
 /////////////////////////////////////////////////////////////
 
 router.post('/notice/uploadImage/:id', auth, ImageUpload.single('image'), async(req, res) => {
+  console.log(req, 'req');
   const imageName = `images/${req.file.filename}`;
   const notice = await Notice.findOne({ _id: req.params.id, owner: req.user._id });
   if( !notice ) {
@@ -40,7 +41,7 @@ router.post('/notice/uploadImage/:id', auth, ImageUpload.single('image'), async(
   }
   notice.imageName = imageName;
   await notice.save();
-  sendResponse(res, 'عکس آپلود شد', {}, 
+  sendResponse(res, 'عکس آپلود شد', {imageName}, 
   200)
 }, (error, req, res, next) => {
   sendError(res, error, 404);

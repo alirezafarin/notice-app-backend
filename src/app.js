@@ -26,7 +26,11 @@ var cors = require('cors')
 //   // Pass to next layer of middleware
 //   next();
 // });
-app.use(cors())
+app.use(cors({
+  origin: true,
+  methods: ["GET", "POST", "DELETE", "PATCH"],
+  credentials: true
+}))
 app.use(express.json());
 app.use(express.static(publicDirectoryPath));
 app.use(userRouter);
