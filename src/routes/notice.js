@@ -101,7 +101,7 @@ router.get('/getNoticeById', async(req, res) => {
 
 router.patch('/notice/:id', auth, async(req, res) => {
 
-  let allowedUpdates = ['name', 'description', 'address', 'phoneNumber'];
+  let allowedUpdates = ['name', 'description', 'address', 'phoneNumber', 'location'];
   let inComingUpdates = Object.keys(req.body);
   inComingUpdates.forEach((updateKey) => {
     if(allowedUpdates.indexOf(updateKey) === -1) {
